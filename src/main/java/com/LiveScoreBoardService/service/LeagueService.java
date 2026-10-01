@@ -35,31 +35,36 @@ public class LeagueService {
 
     public List<League> fetchAndSaveLeagues() {
 
-        String url = "https://www.thesportsdb.com/api/v1/json/123/all_leagues.php";
-
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-
-        List<Map<String, Object>> leagues =
-                (List<Map<String, Object>>) response.getBody().get("leagues");
-
         List<League> result = new ArrayList<>();
 
-        for (Map<String, Object> l : leagues) {
+        try {
+            String url = "https://www.thesportsdb.com/api/v1/json/123/all_leagues.php";
 
-            String sport = (String) l.get("strSport");
-            if (sport == null || !sport.equalsIgnoreCase("Soccer")) continue;
+            ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
 
-            League league = new League();
-            league.setIdLeague((String) l.get("idLeague"));
-            league.setName((String)l.get("strLeague"));
-            league.setCountry(getCountry((String) l.get("strLeague")));
-            league.setLogo("https://www.thesportsdb.com/images/media/league/badge/" + l.get("idLeague") + ".png");
-            result.add(league);
+            List<Map<String, Object>> leagues =
+                    (List<Map<String, Object>>) response.getBody().get("leagues");
+
+
+
+            for (Map<String, Object> l : leagues) {
+
+                String sport = (String) l.get("strSport");
+                if (sport == null || !sport.equalsIgnoreCase("Soccer")) continue;
+
+                League league = new League();
+                league.setIdLeague((String) l.get("idLeague"));
+                league.setName((String)l.get("strLeague"));
+                league.setCountry(getCountry((String) l.get("strLeague")));
+                league.setLogo("https://www.thesportsdb.com/images/media/league/badge/" + l.get("idLeague") + ".png");
+                result.add(league);
+            }
+
+            repo.deleteAll();   // optional: refresh data
+            repo.saveAll(result);
+        } catch (Exception e) {
+            LOGGER.info(e.getMessage());
         }
-
-        repo.deleteAll();   // optional: refresh data
-        repo.saveAll(result);
-
         return result;
     }
 
