@@ -20,3 +20,14 @@ COPY --from=build /app/target/LiveScoreBoard-service-0.0.2-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+#FROM eclipse-temurin:21-jre
+
+#WORKDIR /app
+
+#COPY target/*.jar app.jar
+
+#EXPOSE 8080
+
+#ENTRYPOINT ["java", "-jar", "app.jar"]
