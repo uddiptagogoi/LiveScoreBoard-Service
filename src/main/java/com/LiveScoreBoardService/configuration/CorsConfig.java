@@ -15,7 +15,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000",
-                                        "https://livescoreboard.vercel.app")
+                                        "https://live-score-board-k3j5dpd69-live-score-board.vercel.app")
                         .allowedMethods("GET",
                                         "POST",
                                         "PUT",
